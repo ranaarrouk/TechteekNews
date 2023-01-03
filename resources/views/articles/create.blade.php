@@ -35,7 +35,7 @@
         </div>
     </div>
     <script src="{{ asset('js/editor.js') }}"></script>
-    <script src="{{ asset('js/seach_GIFs.js') }}"></script>
+    <script src="{{ asset('js/search_GIFs.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
         const editor = new EditorJS({

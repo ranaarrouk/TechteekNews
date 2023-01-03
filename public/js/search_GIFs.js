@@ -6,7 +6,7 @@ class GifyProvider{
      url = 'https://api.giphy.com/v1/gifs/search';
      apiKey = 'vLgh9D5gTIfeVjbQWAMmljvU0k08Xiog';
      query;
-     limit;
+     limit = 10;
 
      constructor(query, limit){
          this.limit = limit;
