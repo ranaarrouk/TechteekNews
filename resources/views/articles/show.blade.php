@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Create your article') }}</div>
+                    <div class="card-header"> {{ $article->title }}</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -13,7 +13,10 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        {{ $article->title }}
+                        @php($content = json_decode($article->content))
+                        @if($content->type = 'image')
+                            <embed src="{{ $content->data->gifUrl }}" width="300" height="300">
+                        @endif
                     </div>
                 </div>
             </div>
