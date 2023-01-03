@@ -8,17 +8,18 @@
                     <div class="card-header">{{ __('Create your article') }}</div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
 
+                        <div id="validation_errors" class="alert alert-danger" role="alert" style="display: none;">
+
+                        </div>
                         <form id="editor-form" method="post" action="{{ route('articles.store') }}">
                             @csrf
                             <div class="col-md-12">
                                 <label class="form-label">Title</label>
                                 <input id="title" type="text" class="form-control" name="title">
+                                @if($errors->has('title'))
+                                    <span class="error">{{ $errors->first('title') }}</span>
+                                @endif
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label">Content</label>
@@ -48,19 +49,27 @@
 
         document.querySelector('#submit-btn').addEventListener('click', function (event) {
             event.preventDefault();
+            document.getElementById('validation_errors').style.display = 'none';
+            document.getElementById('validation_errors').innerText = '';
             let form = document.querySelector('#editor-form');
             let title = document.querySelector('#title').value;
-            editor.save().then( (outputData) => {
-               console.log('Article data: ', outputData.blocks);
-               axios({
-                   method: form.method,
-                   url: form.action,
-                   data: {
-                       title: title,
-                       content: outputData.blocks
-                   }
-               }).then(function (response) {
-                   location.assign(response.data);
+            editor.save().then((outputData) => {
+                console.log('Article data: ', outputData.blocks);
+                axios({
+                    method: form.method,
+                    url: form.action,
+                    data: {
+                        title: title,
+                        content: outputData.blocks
+                    }
+                }).then(function (response) {
+                    if (response.data.status == 'fail') {
+                        document.getElementById('validation_errors').style.display = 'block';
+                        document.getElementById('validation_errors').innerText = response.data.message;
+                    } else {
+                        location.assign(response.data);
+                    }
+
                 });
 
             }).catch((error) => {

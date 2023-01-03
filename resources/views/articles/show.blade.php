@@ -13,9 +13,19 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        @php($content = json_decode(\Illuminate\Support\Str::replace(['[', ']'], "", $article->content)))
-                        @if($content->type = 'image')
-                            <embed src="{{ $content->data->gifUrl }}" width="300" height="300">
+                        @php($content = json_decode($article->content, true))
+                        @if(is_array($content))
+                            @foreach($content as $item=>$value)
+                                @if($value["type"] == "paragraph")
+                                    <p>{{ $value["data"]["text"]}}</p><br>
+                                @elseif($value["type"] == 'image')
+                                    <embed src="{{ $value["data"]["gifUrl"] }}" width="300" height="300"><br>
+                                @endif
+                            @endforeach
+                        @else
+                            @if(isset($content->type) == 'image')
+                                <embed src="{{ $content->data->gifUrl }}" width="300" height="300">
+                            @endif
                         @endif
                     </div>
                 </div>
