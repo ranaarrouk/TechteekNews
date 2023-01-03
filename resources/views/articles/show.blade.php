@@ -13,7 +13,7 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        @php($content = json_decode($article->content))
+                        @php($content = json_decode(\Illuminate\Support\Str::replace(['[', ']'], "", $article->content)))
                         @if($content->type = 'image')
                             <embed src="{{ $content->data->gifUrl }}" width="300" height="300">
                         @endif
